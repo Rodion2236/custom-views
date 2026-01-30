@@ -74,24 +74,30 @@ class StatsView @JvmOverloads constructor(
         val total = data.sum()
         if (total <= 0F) return
 
-        val firstColor = colors.firstOrNull() ?: randomColor()
+        val normalize = total > 1.0F
 
         var startAngle = -90F
-        for ((index, value) in data.withIndex()) {
-            val sweepAngle = 360F * value.coerceIn(0F, 1F)
+        var firstSectorColor: Int? = null
 
-            paint.color = colors.getOrNull(index) ?: randomColor()
+        for ((index, value) in data.withIndex()) {
+            val sectorValue = if (normalize) value / total else value
+            val sweepAngle = 360F * sectorValue.coerceIn(0F, 1F)
+
+            val color = colors.getOrNull(index) ?: randomColor()
+            if (index == 0) firstSectorColor = color
+
+            paint.color = color
             canvas.drawArc(oval, startAngle, sweepAngle, false, paint)
             startAngle += sweepAngle
         }
 
         paint.apply {
-            color = firstColor
+            color = firstSectorColor!!
             style = Paint.Style.FILL
         }
         canvas.drawCircle(center.x, center.y - radius, lineWidth / 2 + 0.5F, paint)
 
-        val fillPercent = data.sum().coerceIn(0F, 1F)
+        val fillPercent = if (normalize) 1.0F else total.coerceIn(0F, 1F)
         val metrics = textPaint.fontMetrics
         val textY = center.y - (metrics.descent + metrics.ascent) / 2
         canvas.drawText("%.2f%%".format(fillPercent * 100), center.x, textY, textPaint)
