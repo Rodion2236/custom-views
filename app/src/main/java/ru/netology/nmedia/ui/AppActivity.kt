@@ -22,13 +22,15 @@ class AppActivity : AppCompatActivity() {
         }
 
 
-//        binding.stats.data = listOf(
-//            500F,
-//            500F,
-//            500F,
-//            500F,
-//        )
+        val view = binding.stats
+        binding.stats.data = listOf(
+            0.25F,
+            0.25F,
+            0.25F,
+            0.25F
+        )
 
-        binding.stats.data = listOf(0.25F, 0.25F, 0.25F)
+        val textView = binding.label
+        binding.stats.startAnimation()
     }
 }

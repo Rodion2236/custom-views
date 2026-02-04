@@ -5,6 +5,11 @@
         <attr name="fontSize" format="dimension|reference" />
         <attr name="colors" format="reference" />
         <attr name="emptyColor" format="color|reference"/>
+        <attr name="fillType" format="enum">
+            <enum name="parallel" value="0" />
+            <enum name="sequential" value="1" />
+            <enum name="bidirectional" value="2" />
+        </attr>
     </declare-styleable>
 </resources>
 
